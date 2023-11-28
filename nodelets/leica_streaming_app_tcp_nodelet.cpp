@@ -105,4 +105,4 @@ void LeicaStreamingAppTCPNodelet::locationTSCallback(const double x,
 }
 
 } // namespace leica_streaming_app
-PLUGINLIB_DECLARE_CLASS(leica_streaming_app, LeicaStreamingAppTCPNodelet, leica_streaming_app::LeicaStreamingAppTCPNodelet, nodelet::Nodelet);
+PLUGINLIB_EXPORT_CLASS(leica_streaming_app::LeicaStreamingAppTCPNodelet, nodelet::Nodelet);

@@ -103,4 +103,4 @@ void LeicaStreamingAppSerialNodelet::locationTSCallback(const double x,
 }
 
 } // namespace leica_streaming_app
-PLUGINLIB_DECLARE_CLASS(leica_streaming_app, LeicaStreamingAppSerialNodelet, leica_streaming_app::LeicaStreamingAppSerialNodelet, nodelet::Nodelet);
+PLUGINLIB_EXPORT_CLASS(leica_streaming_app::LeicaStreamingAppSerialNodelet, nodelet::Nodelet);

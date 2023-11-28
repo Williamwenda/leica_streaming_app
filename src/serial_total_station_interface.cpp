@@ -33,7 +33,7 @@ void SerialTSInterface::connect(std::string comport) {
     boost::system::error_code ec;
 
     // what baud rate do we communicate at
-    boost::asio::serial_port_base::baud_rate BAUD(151200);
+    boost::asio::serial_port_base::baud_rate BAUD(115200);
     // how big is each "packet" of data (default is 8 bits)
     boost::asio::serial_port_base::character_size C_SIZE(8);
     // what flow control is used (default is none)
@@ -41,15 +41,17 @@ void SerialTSInterface::connect(std::string comport) {
     // what parity is used (default is none)
     boost::asio::serial_port_base::parity PARITY(boost::asio::serial_port_base::parity::none);
     // how many stop bits are used (default is one)
-    boost::asio::serial_port_base::stop_bits STOP(boost::asio::serial_port_base::stop_bits::one);
+    boost::asio::serial_port_base::stop_bits STOP(boost::asio::serial_port_base::stop_bits::two);
 
+    std::cout << "get into the connect function" << std::endl;
+
+    serial_port_.open(comport, ec);
     serial_port_.set_option(BAUD);
     serial_port_.set_option(C_SIZE);
     serial_port_.set_option(FLOW);
     serial_port_.set_option(PARITY);
     serial_port_.set_option(STOP);
-
-    serial_port_.open(comport, ec);
+    std::cout << "finished setting up" << std::endl;
 
     if (!ec) {
       startReader();
@@ -92,6 +94,7 @@ void SerialTSInterface::writeHandler(const boost::system::error_code& ec,
 
 void SerialTSInterface::readHandler(const boost::system::error_code& ec,
                               std::size_t bytes_transferred) {
+
   if (!ec) {
     // Convert streambuf to std::string
     boost::asio::streambuf::const_buffers_type bufs = readData_.data();
@@ -130,8 +133,8 @@ void SerialTSInterface::readHandler(const boost::system::error_code& ec,
       std::vector<std::string> results;
       boost::split(results, data, [](char c){return c == ',';});
 
-      double x = std::stod(results[1]);
-      double y = std::stod(results[2]);
+      double x = std::stod(results[2]);  // east axis
+      double y = std::stod(results[1]);  // north axis
       double z = std::stod(results[3]);
 
       locationCallback_(x, y, z);
